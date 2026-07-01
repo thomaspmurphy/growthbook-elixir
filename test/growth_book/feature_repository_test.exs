@@ -6,49 +6,31 @@ defmodule GrowthBook.FeatureRepositoryTest do
 
   # Mock HTTP client for testing
   defmodule MockHTTP do
-    # This simulates the GrowthBook API server
     def get("https://cdn.growthbook.io/api/features/client-key") do
-      {:ok,
-       %HTTPoison.Response{
-         status_code: 200,
-         body:
-           Jason.encode!(%{
-             "features" => %{
-               "feature-1" => %{"defaultValue" => true},
-               "feature-2" => %{"defaultValue" => "test"}
-             }
-           })
-       }}
+      {:ok, 200,
+       Jason.encode!(%{
+         "features" => %{
+           "feature-1" => %{"defaultValue" => true},
+           "feature-2" => %{"defaultValue" => "test"}
+         }
+       })}
     end
 
-    # This simulates the encrypted response from GrowthBook API
     def get("https://cdn.growthbook.io/api/features/encrypted-client-key") do
-      # Return a simple encrypted payload that our decryption module can handle for testing
-      # This is a simplified version that doesn't require actual decryption
-      {:ok,
-       %HTTPoison.Response{
-         status_code: 200,
-         body:
-           Jason.encode!(%{
-             # Use a special format our test decryption module will recognize
-             "encryptedFeatures" => "test.dGVzdA=="
-           })
-       }}
+      {:ok, 200, Jason.encode!(%{"encryptedFeatures" => "test.dGVzdA=="})}
     end
 
-    # Error cases - these can still use different client keys for simpler testing
     def get("https://cdn.growthbook.io/api/features/error-key") do
-      {:ok, %HTTPoison.Response{status_code: 500, body: "Internal Server Error"}}
+      {:ok, 500, "Internal Server Error"}
     end
 
     def get("https://cdn.growthbook.io/api/features/timeout-key") do
-      # Simulate network delay
       Process.sleep(200)
-      {:error, %HTTPoison.Error{reason: :timeout}}
+      {:error, :timeout}
     end
 
     def get("https://cdn.growthbook.io/api/features/invalid-json-key") do
-      {:ok, %HTTPoison.Response{status_code: 200, body: "not-json"}}
+      {:ok, 200, "not-json"}
     end
   end
 

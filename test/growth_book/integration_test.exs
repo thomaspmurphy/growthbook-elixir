@@ -22,7 +22,7 @@ defmodule GrowthBook.IntegrationTest do
 
     def get("https://cdn.growthbook.io/api/features/client-key") do
       body = Agent.get(__MODULE__, fn state -> Jason.encode!(state) end)
-      {:ok, %HTTPoison.Response{status_code: 200, body: body}}
+      {:ok, 200, body}
     end
 
     def update_features(new_features) do

@@ -5,39 +5,26 @@ defmodule GrowthBook.InitTest do
 
   # Mock HTTP client for testing
   defmodule MockHTTP do
-    # Regular features
     def get("https://cdn.growthbook.io/api/features/client-key") do
-      {:ok,
-       %HTTPoison.Response{
-         status_code: 200,
-         body:
-           Jason.encode!(%{
-             "features" => %{
-               "feature-1" => %{"defaultValue" => true},
-               "feature-2" => %{"defaultValue" => "test"}
-             }
-           })
-       }}
+      {:ok, 200,
+       Jason.encode!(%{
+         "features" => %{
+           "feature-1" => %{"defaultValue" => true},
+           "feature-2" => %{"defaultValue" => "test"}
+         }
+       })}
     end
 
-    # Encrypted features
     def get("https://cdn.growthbook.io/api/features/encrypted-client-key") do
-      {:ok,
-       %HTTPoison.Response{
-         status_code: 200,
-         body:
-           Jason.encode!(%{
-             "encryptedFeatures" => "mock-encrypted-data"
-           })
-       }}
+      {:ok, 200, Jason.encode!(%{"encryptedFeatures" => "mock-encrypted-data"})}
     end
 
     def get("https://cdn.growthbook.io/api/features/error-key") do
-      {:ok, %HTTPoison.Response{status_code: 500, body: "Internal Server Error"}}
+      {:ok, 500, "Internal Server Error"}
     end
 
     def get("https://cdn.growthbook.io/api/features/timeout-key") do
-      {:error, %HTTPoison.Error{reason: :timeout}}
+      {:error, :timeout}
     end
   end
 
@@ -145,7 +132,7 @@ defmodule GrowthBook.InitTest do
         def get(_url) do
           # Sleep longer than our timeout
           Process.sleep(200)
-          {:ok, %HTTPoison.Response{status_code: 200, body: "{}"}}
+          {:ok, 200, "{}"}
         end
       end
 

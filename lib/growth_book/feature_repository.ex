@@ -207,11 +207,11 @@ defmodule GrowthBook.FeatureRepository do
 
     Logger.debug("Requesting features from #{url}")
 
-    http_client = Application.get_env(:growthbook, :http_client, HTTPoison)
+    http_client = Application.get_env(:growthbook, :http_client, GrowthBook.FeatureRepository.HttptcClient)
 
     try do
       case http_client.get(url) do
-        {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
+        {:ok, 200, body} ->
           parsed = Jason.decode!(body)
 
           features =
@@ -237,10 +237,10 @@ defmodule GrowthBook.FeatureRepository do
             {:error, reason} -> {:error, reason}
           end
 
-        {:ok, %HTTPoison.Response{status_code: status}} ->
+        {:ok, status, _body} ->
           {:error, "API request failed with status #{status}"}
 
-        {:error, %HTTPoison.Error{reason: reason}} ->
+        {:error, reason} ->
           {:error, "HTTP request failed: #{inspect(reason)}"}
       end
     rescue
