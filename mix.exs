@@ -41,7 +41,7 @@ defmodule GrowthBook.MixProject do
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
       {:jason, "~> 1.3"},
       {:dialyxir, "~> 1.1", only: :dev, runtime: false},
-      {:httpoison, "~> 2.0"},
+      {:httpoison, "~> 3.0"},
       {:meck, "~> 0.9.2", only: :test}
     ]
   end
