@@ -1,8 +1,8 @@
 defmodule GrowthBook.MixProject do
   use Mix.Project
 
-  @version "0.3.0"
-  @repo_url "https://github.com/growthbook/growthbook-elixir"
+  @version "0.4.0"
+  @repo_url "https://github.com/WTTJ/growthbook-elixir"
 
   def project do
     [
@@ -16,7 +16,7 @@ defmodule GrowthBook.MixProject do
 
       # Hex
       package: package(),
-      description: "Elixir SDK for running A/B tests with GrowthBook",
+      description: "Elixir SDK for running A/B tests with GrowthBook (WTTJ fork: httpoison 3.x / hackney 4.x)",
 
       # Docs
       name: "GrowthBook",
@@ -48,9 +48,12 @@ defmodule GrowthBook.MixProject do
 
   defp package do
     [
-      maintainers: ["GrowthBook"],
+      maintainers: ["GrowthBook", "WTTJ"],
       licenses: ["MIT"],
-      links: %{"GitHub" => @repo_url}
+      links: %{
+        "GitHub" => @repo_url,
+        "Upstream" => "https://github.com/growthbook/growthbook-elixir"
+      }
     ]
   end
 
